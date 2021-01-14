@@ -35,8 +35,8 @@ git log --oneline
 
 ```
 git branch -a
-git checkout -b 作りたいブランチ名
-git checkout -b 作って移動したいブランチ名
+git checkout -b ブランチ名
+git branch -d 削除したいブランチ名
 git checkout 戻りたいブランチ名
 ```
 
