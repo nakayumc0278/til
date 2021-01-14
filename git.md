@@ -51,3 +51,9 @@ git push origin ブランチ名
 ```
 git pull origin ブランチ名
 ```
+
+### 他ブランチからファイルを持ってくる
+
+```
+git cherry-pick [コミットのハッシュID]
+```
