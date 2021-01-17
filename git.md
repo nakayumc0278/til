@@ -20,7 +20,7 @@
 
 `git add [FL名]`  
 ファイルやディレクトリをインデックスに登録  
-ワイルドカードで指定もできる。sample\*.py test?.js など。
+ワイルドカードで指定もできる。sample\*.py test?.js など
 
 # commit
 
@@ -49,7 +49,7 @@
 # branch
 
 `git branch &[new branch]`  
-現在のブランチの確認 と 新しいブランチを作成する.
+現在のブランチの確認 と 新しいブランチを作成する
 
 `git branch -a`  
 すべてのブランチを確認
@@ -73,12 +73,12 @@
 
 # push
 
-`git push origin [branch]`
+`git push origin [branch]`  
 リモートに変更を書き込む
 
 # pull
 
-`git pull origin [bransh]`
+`git pull origin [bransh]`  
 リモートの変更を取り込む
 
 # cherry-pick
