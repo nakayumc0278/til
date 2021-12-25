@@ -1,12 +1,16 @@
 ## httpdバージョンチェック
 
+既にインストールされていたため、こちらのバージョンを使用する。
+
 ```
 $ httpd -v
 Server version: Apache/2.4.51 ()
 Server built:   Oct  8 2021 22:03:47
 ```
 
-## phpインストールチェック
+## PHPインストールチェック
+
+既にインストールされていたため、こちらのバージョンを使用する。
 
 ```
 rpm -qa | grep php 
@@ -22,13 +26,15 @@ php-mysqlnd-7.2.24-1.amzn2.0.1.x86_64
 php-xml-7.2.24-1.amzn2.0.1.x86_64
 ```
 
-## php一部ないので、serverworld基準でインストール
+## PHP 一部ないので、serverworld基準でインストール
 
 ```
 yum -y install php php-mbstring
 ```
 
-## php timezone変更
+## PHP タイムゾーン変更
+
+タイムゾーンを Asia/Tokyo に変更
 
 ```
 vi /etc/php.ini
@@ -61,6 +67,8 @@ man-db-2.6.3-9.amzn2.0.3.x86_64
 mariadb-config-10.2.38-1.amzn2.0.1.x86_64
 ```
 
+インストールしたバージョンは、10.2.38 である。
+
 ```
 $ yum -y install mariadb-server
 
@@ -88,6 +96,7 @@ Installing for dependencies:
  
 ```
 
+## MariaDB の文字コードをUTF8に設定
 
 ```
 $ vi /etc/my.cnf 
@@ -97,14 +106,15 @@ symbolic-links=0
 + character-set-server=utf8
 ```
 
-## MariaDB起動&自動起動有効
+## MariaDB起動
 
 ```
-systemctl enable --now mariadb
+systemctl start mariadb
 ```
-
 
 ## 初期設定
+
+mysql_secure_installationコマンドで初期設定を行うことができる。
 
 ```
 #  mysql_secure_installation 
@@ -170,7 +180,6 @@ Reload privilege tables now? [Y/n] y
  ... Success!
 
 Cleaning up...
-
 All done!  If you've completed all of the above steps, your MariaDB
 installation should now be secure.
 
@@ -196,6 +205,8 @@ mariadb-config-10.2.38-1.amzn2.0.1.x86_64
 ```
 
 ## cacti を yum でインストールする
+
+インストールしたバージョンは、1.2.19 である。
 
 ```
 $ yum install cacti
@@ -250,6 +261,9 @@ Installing for dependencies:
 
 ## cacti ユーザ作成 
 
+MariaDBにて cacti がDBを操作できるようにユーザを作成する。
+今回は、ユーザ名: “cacti” パスワードは “Cnetuser” と設定。
+
 ```
 $ mysql -u root -p
 CREATE USER 'cacti'@'localhost' IDENTIFIED BY 'Cnetuser';
@@ -274,6 +288,8 @@ MariaDB [(none)]> show databases;
 
 ## cacti に cacti DBの権限付与
 
+このままではユーザ cacti がcacti データベースの操作権限を持っていないため、権限を付与
+
 ```
 grant all on cacti.* to cacti@localhost identified by 'Cnetuser';
 flush privileges;
@@ -281,12 +297,16 @@ flush privileges;
 
 ## cacti DB に データ挿入
 
+cacti データベースを初期化するため、用意されているデータを挿入する。
+
 ```
 $ mysql -u cacti -p cacti < /usr/share/doc/cacti-1.2.19/cacti.sql
 (Password Cnetuser)
 ```
 
 ## cacti.conf 設定変更
+
+このままでは、ローカルホストだけがcacti のページをアクセス許可しているため、全てのアクセスを許可するため、設定変更をする。
 
 ```
 $ vi /etc/httpd/conf.d/cacti.conf
@@ -310,41 +330,51 @@ Alias /cacti    /usr/share/cacti
 
 ## cacti DBの設定変更
 
+このファイルにデータベース接続先についての設定が記述されている。
+初期状態では、データベースにアクセスできないため、設定変更する。
+
 ```
 $ vi /etc/cacti/db.php
 
-$database_type     = 'mysql';
-$database_default  = 'cacti';
-$database_hostname = 'localhost';
-$database_username = 'cacti';
-$database_password = 'Cnetuser';
-$database_port     = '3306';
-$database_retries  = 5;
-$database_ssl      = false;
-$database_ssl_key  = '';
-$database_ssl_cert = '';
-$database_ssl_ca   = '';
-$database_persist  = false;
+  $database_type     = 'mysql';
+  $database_default  = 'cacti';
+  $database_hostname = 'localhost';
+- $database_username = 'cactiuser';
++ $database_username = 'cacti';
+- $database_password = 'cactiuser';
++ $database_password = 'Cnetuser';
+  $database_port     = '3306';
+  $database_retries  = 5;
+  $database_ssl      = false;
+  $database_ssl_key  = '';
+  $database_ssl_cert = '';
+  $database_ssl_ca   = '';
+  $database_persist  = false;
 ```
 
 ## cron にpollerを登録
 
+初期状態だと、コメントアウトされているので、コメント解除する。
+今回は検証のため毎分実行するようにする。
+
 ```
 vi /etc/cron.d/cacti
-*/5 * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
+#*/5 * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
+* * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
 (既にいるのでコメント解除でOK)
 ```
 
 ## net-snmpの設定
 
+今回は naka から kaku を監視する設定例
 ```
 $ vi /etc/snmp/snmpd.conf
 ####
 # First, map the community name "public" into a "security name
 #       sec.name  source          community
-- com2sec notConfigUser  default       public
-+ com2sec mynetwork  localhost      nakayumc
-+ com2sec mynetwork  172.31.32.0/20 nakayumc
+- com2sec notConfigUser  default    public
++ com2sec mynetwork  localhost      naka # localhost からのアクセス許可
++ com2sec mynetwork  172.31.32.0/20 naka # 172.31.32.0/20 からのアクセス許可
 
 ####
 # Second, map the security name into a group name:
@@ -352,7 +382,7 @@ $ vi /etc/snmp/snmpd.conf
 #       groupName      securityModel securityName
 - group   notConfigGroup v1           notConfigUser
 - group   notConfigGroup v2c           notConfigUser
-+ group   mynetwork_group v1            mynetwork
++ group   mynetwork_group v1            mynetwork 
 + group   mynetwork_group v2c           mynetwork
 
 ####
@@ -382,11 +412,10 @@ view    systemview    included   .1.3.6.1.2.1.25.1.1
 
 ```
 
-## net-snmp 再起動
+## net-snmp 起動
 
 ```
-$ systemctl restart snmpd
-$ systemctl enable snmpd
+$ systemctl start snmpd
 ```
 
 ## snmpwalk コマンドで動作確認
@@ -438,10 +467,10 @@ HOST-RESOURCES-MIB::hrSystemUptime.0 = No more variables left in this MIB View (
 ・
 ```
 
-## httpd 起動 & 自動起動有効 
+## httpd 各サービスの自動起動有効化
 
 ```
-$ systemctl enable httpd.service --now
+$ systemctl enable php-fpm mariadb httpd snmpd --now
 ```
 
 ## 設定できるとログインページが表示
@@ -530,10 +559,10 @@ character-set-server=utf8
 + innodb_io_capacity_max=10000
 ```
 
-## DB再起動
+## 各サービス再起動
 
 ```
-$ systemctl restart mariadb
+$ systemctl restart mariadb php-fpm httpd
 ```
 
 ![setup2_ok](https://raw.githubusercontent.com/Linux-Database/image/main/setup/setup2_ok.jpg)
