@@ -195,6 +195,146 @@ mariadb-server-10.2.38-1.amzn2.0.1.x86_64
 mariadb-config-10.2.38-1.amzn2.0.1.x86_64
 ```
 
+## cacti を yum でインストールする
+
+```
+$ yum install cacti
+
+=======================================================================================================
+ Package              Arch   Version                          Repository                          Size
+=======================================================================================================
+Installing:
+ cacti                noarch 1.2.19-1.el7                     epel                                31 M
+Installing for dependencies:
+ cairo                x86_64 1.15.12-4.amzn2                  amzn2-core                         732 k
+ dejavu-sans-mono-fonts
+                      noarch 2.33-6.amzn2                     amzn2-core                         433 k
+ fribidi              x86_64 1.0.2-1.amzn2.1                  amzn2-core                          79 k
+ graphite2            x86_64 1.3.10-1.amzn2.0.2               amzn2-core                         115 k
+ harfbuzz             x86_64 1.7.5-2.amzn2                    amzn2-core                         279 k
+ libX11               x86_64 1.6.7-3.amzn2.0.2                amzn2-core                         606 k
+ libX11-common        noarch 1.6.7-3.amzn2.0.2                amzn2-core                         165 k
+ libXau               x86_64 1.0.8-2.1.amzn2.0.2              amzn2-core                          29 k
+ libXdamage           x86_64 1.1.4-4.1.amzn2.0.2              amzn2-core                          20 k
+ libXext              x86_64 1.3.3-3.amzn2.0.2                amzn2-core                          39 k
+ libXfixes            x86_64 5.0.3-1.amzn2.0.2                amzn2-core                          18 k
+ libXft               x86_64 2.3.2-2.amzn2.0.2                amzn2-core                          60 k
+ libXpm               x86_64 3.5.12-1.amzn2.0.2               amzn2-core                          57 k
+ libXrender           x86_64 0.9.10-1.amzn2.0.2               amzn2-core                          26 k
+ libXxf86vm           x86_64 1.1.4-1.amzn2.0.2                amzn2-core                          17 k
+ libglvnd             x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                          89 k
+ libglvnd-egl         x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                          43 k
+ libglvnd-glx         x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                         125 k
+ libthai              x86_64 0.1.14-9.amzn2.0.2               amzn2-core                         187 k
+ libwayland-client    x86_64 1.17.0-1.amzn2                   amzn2-core                          34 k
+ libwayland-server    x86_64 1.17.0-1.amzn2                   amzn2-core                          40 k
+ libxcb               x86_64 1.12-1.amzn2.0.2                 amzn2-core                         216 k
+ libxshmfence         x86_64 1.2-1.amzn2.0.2                  amzn2-core                         7.2 k
+ mesa-libEGL          x86_64 18.3.4-5.amzn2.0.1               amzn2-core                         108 k
+ mesa-libGL           x86_64 18.3.4-5.amzn2.0.1               amzn2-core                         162 k
+ mesa-libgbm          x86_64 18.3.4-5.amzn2.0.1               amzn2-core                          38 k
+ mesa-libglapi        x86_64 18.3.4-5.amzn2.0.1               amzn2-core                          45 k
+ net-snmp             x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         325 k
+ net-snmp-agent-libs  x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         701 k
+ net-snmp-libs        x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         748 k
+ net-snmp-utils       x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         200 k
+ pango                x86_64 1.42.4-4.amzn2                   amzn2-core                         280 k
+ php-gd               x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2 179 k
+ php-gmp              x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  75 k
+ php-intl             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2 223 k
+ php-ldap             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  78 k
+ php-snmp             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  72 k
+ pixman               x86_64 0.34.0-1.amzn2.0.2               amzn2-core                         254 k
+ rrdtool              x86_64 1.4.8-9.amzn2.0.1                amzn2-core                         369 k
+```
+
+## cacti ユーザ作成 
+
+```
+$ mysql -u root -p
+CREATE USER 'cacti'@'localhost' IDENTIFIED BY 'Cnetuser';
+```
+
+## cacti DB作成
+
+```
+$ CREATE DATABASE cacti;
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| cacti              |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.00 sec)
+```
+
+## cacti に cacti DBの権限付与
+
+```
+grant all on cacti.* to cacti@localhost identified by 'Cnetuser';
+flush privileges;
+```
+
+## cacti DB に データ挿入
+
+```
+$ mysql -u cacti -p cacti < /usr/share/doc/cacti-1.2.19/cacti.sql
+(Password Cnetuser)
+```
+
+## cacti.conf 設定変更
+
+```
+$ vi /etc/httpd/conf.d/cacti.conf
+
+Alias /cacti    /usr/share/cacti
+
+<Directory /usr/share/cacti/>
+        <IfModule mod_authz_core.c>
+                # httpd 2.4
+-                Require host localhost
++                Require all grented
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+                # httpd 2.2
+                Order deny,allow
+                Deny from all
+                Allow from localhost
+        </IfModule>
+</Directory>
+```
+
+## cacti DBの設定変更
+
+```
+$ vi /etc/cacti/db.php
+
+$database_type     = 'mysql';
+$database_default  = 'cacti';
+$database_hostname = 'localhost';
+$database_username = 'cacti';
+$database_password = 'Cnetuser';
+$database_port     = '3306';
+$database_retries  = 5;
+$database_ssl      = false;
+$database_ssl_key  = '';
+$database_ssl_cert = '';
+$database_ssl_ca   = '';
+$database_persist  = false;
+```
+
+## cron にpollerを登録
+
+```
+vi /etc/cron.d/cacti
+*/5 * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
+(既にいるのでコメント解除でOK)
+```
+
 ## net-snmpの設定
 
 ```
@@ -298,150 +438,10 @@ HOST-RESOURCES-MIB::hrSystemUptime.0 = No more variables left in this MIB View (
 ・
 ```
 
-## cacti を yum でインストールする
-
-```
-$ yum install cacti
-
-=======================================================================================================
- Package              Arch   Version                          Repository                          Size
-=======================================================================================================
-Installing:
- cacti                noarch 1.2.19-1.el7                     epel                                31 M
-Installing for dependencies:
- cairo                x86_64 1.15.12-4.amzn2                  amzn2-core                         732 k
- dejavu-sans-mono-fonts
-                      noarch 2.33-6.amzn2                     amzn2-core                         433 k
- fribidi              x86_64 1.0.2-1.amzn2.1                  amzn2-core                          79 k
- graphite2            x86_64 1.3.10-1.amzn2.0.2               amzn2-core                         115 k
- harfbuzz             x86_64 1.7.5-2.amzn2                    amzn2-core                         279 k
- libX11               x86_64 1.6.7-3.amzn2.0.2                amzn2-core                         606 k
- libX11-common        noarch 1.6.7-3.amzn2.0.2                amzn2-core                         165 k
- libXau               x86_64 1.0.8-2.1.amzn2.0.2              amzn2-core                          29 k
- libXdamage           x86_64 1.1.4-4.1.amzn2.0.2              amzn2-core                          20 k
- libXext              x86_64 1.3.3-3.amzn2.0.2                amzn2-core                          39 k
- libXfixes            x86_64 5.0.3-1.amzn2.0.2                amzn2-core                          18 k
- libXft               x86_64 2.3.2-2.amzn2.0.2                amzn2-core                          60 k
- libXpm               x86_64 3.5.12-1.amzn2.0.2               amzn2-core                          57 k
- libXrender           x86_64 0.9.10-1.amzn2.0.2               amzn2-core                          26 k
- libXxf86vm           x86_64 1.1.4-1.amzn2.0.2                amzn2-core                          17 k
- libglvnd             x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                          89 k
- libglvnd-egl         x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                          43 k
- libglvnd-glx         x86_64 1:1.0.1-0.1.git5baa1e5.amzn2.0.1 amzn2-core                         125 k
- libthai              x86_64 0.1.14-9.amzn2.0.2               amzn2-core                         187 k
- libwayland-client    x86_64 1.17.0-1.amzn2                   amzn2-core                          34 k
- libwayland-server    x86_64 1.17.0-1.amzn2                   amzn2-core                          40 k
- libxcb               x86_64 1.12-1.amzn2.0.2                 amzn2-core                         216 k
- libxshmfence         x86_64 1.2-1.amzn2.0.2                  amzn2-core                         7.2 k
- mesa-libEGL          x86_64 18.3.4-5.amzn2.0.1               amzn2-core                         108 k
- mesa-libGL           x86_64 18.3.4-5.amzn2.0.1               amzn2-core                         162 k
- mesa-libgbm          x86_64 18.3.4-5.amzn2.0.1               amzn2-core                          38 k
- mesa-libglapi        x86_64 18.3.4-5.amzn2.0.1               amzn2-core                          45 k
- net-snmp             x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         325 k
- net-snmp-agent-libs  x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         701 k
- net-snmp-libs        x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         748 k
- net-snmp-utils       x86_64 1:5.7.2-49.amzn2.1               amzn2-core                         200 k
- pango                x86_64 1.42.4-4.amzn2                   amzn2-core                         280 k
- php-gd               x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2 179 k
- php-gmp              x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  75 k
- php-intl             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2 223 k
- php-ldap             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  78 k
- php-snmp             x86_64 7.2.24-1.amzn2.0.1               amzn2extra-lamp-mariadb10.2-php7.2  72 k
- pixman               x86_64 0.34.0-1.amzn2.0.2               amzn2-core                         254 k
- rrdtool              x86_64 1.4.8-9.amzn2.0.1                amzn2-core                         369 k
-```
-
-## cacti ユーザ作成 
-
-```
-$ mysql -u root -p
-CREATE USER 'cacti'@'localhost' IDENTIFIED BY 'Cnetuser';
-```
-
-## cacti DB作成
-
-```
-$ CREATE DATABASE cacti;
-
-MariaDB [(none)]> show databases;
-+--------------------+
-| Database           |
-+--------------------+
-| cacti              |
-| information_schema |
-| mysql              |
-| performance_schema |
-+--------------------+
-4 rows in set (0.00 sec)
-```
-
-## cacti に cacti DBの権限付与
-
-```
-grant all on cacti.* to cacti@localhost identified by 'Cnetuser';
-flush privileges;
-```
-
-## cacti DB に データ挿入
-
-```
-$ mysql -u cacti -p cacti < /usr/share/doc/cacti-1.2.19/cacti.sql
-(Password Cnetuser)
-```
-
 ## httpd 起動 & 自動起動有効 
 
 ```
 $ systemctl enable httpd.service --now
-```
-
-## cacti.conf 設定変更
-
-```
-$ vi /etc/httpd/conf.d/cacti.conf
-
-Alias /cacti    /usr/share/cacti
-
-<Directory /usr/share/cacti/>
-        <IfModule mod_authz_core.c>
-                # httpd 2.4
--                Require host localhost
-+                Require all grented
-        </IfModule>
-        <IfModule !mod_authz_core.c>
-                # httpd 2.2
-                Order deny,allow
-                Deny from all
-                Allow from localhost
-        </IfModule>
-</Directory>
-```
-
-## cacti DBの設定変更
-
-```
-$ vi /etc/cacti/db.php
-
-$database_type     = 'mysql';
-$database_default  = 'cacti';
-$database_hostname = 'localhost';
-$database_username = 'cacti';
-$database_password = 'Cnetuser';
-$database_port     = '3306';
-$database_retries  = 5;
-$database_ssl      = false;
-$database_ssl_key  = '';
-$database_ssl_cert = '';
-$database_ssl_ca   = '';
-$database_persist  = false;
-```
-
-## cron にpollerを登録
-
-```
-vi /etc/cron.d/cacti
-*/5 * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
-(既にいるのでコメント解除でOK)
 ```
 
 ## 設定できるとログインページが表示
