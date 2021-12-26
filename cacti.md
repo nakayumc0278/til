@@ -641,7 +641,7 @@ Data Query [Unix - Get Monitored Partitions] の /dev/xvda1 を選択して作�
 
 ### ネットワークトラヒック量
 
-![snmp_network1](https://raw.githubusercontent.com/Linux-Database/image/main/snmp_network.jpg)
+![snmp_network1](https://raw.githubusercontent.com/Linux-Database/image/main/graph/snmp_network1.jpg)
 トラヒック量を見るには、SNMPで取得したデータをクエリーとして追加する必要がある。
 マネジメント＞デバイス＞連想データ照会＞Add Data Query で SNMP - Interface Statistics を選択して追加ボタンをクリックする。
 
@@ -669,7 +669,7 @@ Data Query [Unix - Get Monitored Partitions] の /dev/xvda1 を選択して作�
 kaku をクリック。
 連想データ照会＞Add Data Query > Net-SNMP - Get Monitored Partitions と SNMP - Interface Statistics を追加する。
 
-![hostad4](https://raw.githubusercontent.com/Linux-Database/image/main/hostadd/hostad4.jpg)
+![hostadd4](https://raw.githubusercontent.com/Linux-Database/image/main/hostadd/hostadd4.jpg)
 次に、コンソール＞作成＞新規グラフで、
 Data Query [SNMP - Get Mounted Partitions] の / と
 Data Query [SNMP - Interface Statistics] の eth 0 に チェックを入れて作成をクリック。
