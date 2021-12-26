@@ -421,7 +421,7 @@ $ systemctl start snmpd
 ## snmpwalk コマンドで動作確認
 
 ```
-$ snmpwalk -v 2c -c nakayumc 172.31.46.85
+$ snmpwalk -v 2c -c naka 172.31.46.85
 
 SNMPv2-MIB::sysDescr.0 = STRING: Linux ip-172-31-46-85.ap-northeast-1.compute.internal 4.14.256-197.484.amzn2.x86_64 #1 SMP Tue Nov 30 00:17:50 UTC 2021 x86_64
 SNMPv2-MIB::sysObjectID.0 = OID: NET-SNMP-MIB::netSnmpAgentOIDs.10
