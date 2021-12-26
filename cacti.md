@@ -369,29 +369,29 @@ vi /etc/cron.d/cacti
 今回は naka から kaku を監視する設定例
 ```
 $ vi /etc/snmp/snmpd.conf
-####
-# First, map the community name "public" into a "security name
-#       sec.name  source          community
+  ####
+  # First, map the community name "public" into a "security name
+  #       sec.name  source          community
 - com2sec notConfigUser  default    public
 + com2sec mynetwork  localhost      naka # localhost からのアクセス許可
 + com2sec mynetwork  172.31.32.0/20 naka # 172.31.32.0/20 からのアクセス許可
 
-####
-# Second, map the security name into a group name:
+  ####
+  # Second, map the security name into a group name:
 
-#       groupName      securityModel securityName
-- group   notConfigGroup v1           notConfigUser
-- group   notConfigGroup v2c           notConfigUser
-+ group   mynetwork_group v1            mynetwork 
-+ group   mynetwork_group v2c           mynetwork
+  #       groupName      securityModel securityName
+  - group   notConfigGroup v1           notConfigUser
+  - group   notConfigGroup v2c           notConfigUser
+  + group   mynetwork_group v1            mynetwork 
+  + group   mynetwork_group v2c           mynetwork
 
-####
-# Third, create a view for us to let the group have rights to:
+  ####
+  # Third, create a view for us to let the group have rights to:
 
-# Make at least  snmpwalk -v 1 localhost -c public system fast again.
-#       name           incl/excl     subtree         mask(optional)
-view    systemview    included   .1.3.6.1.2.1.1
-view    systemview    included   .1.3.6.1.2.1.25.1.1
+  # Make at least  snmpwalk -v 1 localhost -c public system fast again.
+  #       name           incl/excl     subtree         mask(optional)
+  view    systemview    included   .1.3.6.1.2.1.1
+  view    systemview    included   .1.3.6.1.2.1.25.1.1
 + view    systemview    included   .1.3.6.1.
 + view    all_view      included   .1
 
@@ -399,15 +399,15 @@ view    systemview    included   .1.3.6.1.2.1.25.1.1
 + access  mynetwork_group ""      any       noauth    exact  systemview none none
 + access  mynetwork_group ""      any       noauth    exact  all_view none none
 
-# disk PATH [MIN=100000]
-#
-# PATH:  mount path to the disk in question.
-# MIN:   Disks with space below this value will have the Mib's errorFlag set.
-#        Default value = 100000.
+  # disk PATH [MIN=100000]
+  #
+  # PATH:  mount path to the disk in question.
+  # MIN:   Disks with space below this value will have the Mib's errorFlag set.
+  #        Default value = 100000.
 
-# Check the / partition and make sure it contains at least 10 megs.
+  # Check the / partition and make sure it contains at least 10 megs.
 
-- #disk / 10000
+  #disk / 10000
 + disk / 10000
 
 ```
