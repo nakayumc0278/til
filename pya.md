@@ -131,7 +131,7 @@ Playbookとは、環境構築に関する設定情報を定義したファイル
 ```
 次に、Ansibleの構築手順を説明します。
 まず、AnsibleはEPEL(イーペル)というリポジトリに登録されているため、
-dnf install epel-release コマンドを実行して、epelをインストールします。
+yum install epel-release コマンドを実行して、epelをインストールします。
 ```
 
 (構築->インストール)
