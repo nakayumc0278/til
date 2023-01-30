@@ -1,87 +1,116 @@
-## 基本的な Git コマンドまとめ
+# 基本的な Git コマンドまとめ
 
-# 初期設定
+## 初期設定
 
-`git config --global user.name "USERNAME"`  
+`git config --global user.name "username"`  
 ユーザ ID
 
-`git config --global user.email "MAILADDR"`  
+`git config --global user.email "e-mail"`  
 メールアドレス
 
 `git config --global color.ui auto`  
 出力を色づけする
 
-# clone
+## 初期化 & リモートリポジトリの追加
+`git init`  
+`git remote add origin [URL]`  
+`git pull origin [baranch]`  
 
-`git clone https://github.com/nakayumc0278/*****.git`  
-リポジトリをコピーする
+## 直前のコミットを取り消したいとき
+`git commit --amend`
 
-# add
+## push を取り消したくなったとき
+` git reset --mixed HEAD^`  
+` git push -f origin [branch]`
 
-`git add [FL名]`  
-ファイルやディレクトリをインデックスに登録  
-ワイルドカードで指定もできる。sample\*.py test?.js など
+# コマンドの説明
 
-# commit
-
-`git commit -m “[コメント]”`  
-コミットメッセージを同時に指定
-
-`git commit --amend`  
-直前のコミットを修正する
-
-# status
+## Git の管理
+### status
 
 `git status`  
-ステータスの確認
+現在のステータスの確認
 
-# log
+### log
 
 `git log`  
-コミットログを参照
+コミットしたログを出力
 
 `git log --oneline`  
-コミットログの先頭７桁のコミット ID を表示
+コミットしたログの先頭７桁のコミットIDとコミットメッセージを出力
 
 `git log --graph`  
-コミットログを縦グラフで表示
+コミットしたログを縦グラフで出力
 
-# branch
+## ファイル操作系
+### clone
 
-`git branch &[new branch]`  
-現在のブランチの確認 と 新しいブランチを作成する
+`git clone https://github.com/username/repo-name.git`  
+リポジトリをコピーする
 
-`git branch -a`  
-すべてのブランチを確認
+### add
 
-`git branch -r`  
-リモートブランチを確認
+`git add [File]`  
+ファイルやディレクトリをステージングに追加する  
+ワイルドカードで指定もできる。`sample/*.py` など
 
-`git branch -d [branch]`  
-ブランチを削除
+### commit
 
-`git branch -m [branch] [new branchname]`  
-ブランチ名を変更
+`git commit -m "Commit Message"`  
+コミットメッセージを同時に指定
 
-# checkuout
-
-`git checkout [branch]`  
-ブランチを変更
-
-`git checkout -b [branch]`  
-ブランチを作成して移動する
-
-# push
+### push
 
 `git push origin [branch]`  
 リモートに変更を書き込む
 
-# pull
+### pull
 
 `git pull origin [bransh]`  
 リモートの変更を取り込む
 
-# cherry-pick
+## ブランチ操作
+### branch
 
-`git cherry-pick [コミット ID]`  
+`git branch [new branch]`  
+新しいブランチを作成する
+
+`git branch -a`  
+すべてのブランチを確認
+
+`git branch -d [branch]`  
+ブランチを削除
+
+`git branch -m [branch] [new branch]`  
+ブランチ名を変更
+
+### checkout
+
+`git checkout [branch]`  
+ブランチを切替える
+
+`git checkout -b [branch]`  
+ブランチを作成しつつ、作成したブランチに切替える
+
+### cherry-pick
+
+`git cherry-pick [commit-id]`  
 別のブランチのコミットを現在のブランチにコピー
+
+## タグ操作
+### tag
+
+`git tag [tag name]`  
+現在のコミットにタグを付ける
+
+`git tag -a [tag name] -m "tag message"`  
+タグにメッセージを付ける
+
+`git tag -a [tag name] [commit id]`  
+コミットした後にタグをつける場合
+
+`git tag -d [tag name]`  
+タグを削除する
+
+`git push origin [tag name]`  
+リモートにタグをプッシュする
