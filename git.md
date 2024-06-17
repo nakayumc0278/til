@@ -115,5 +115,5 @@
 `git push origin [tag name]`  
 リモートにタグをプッシュする
 
-`git tag -l | xargs -n 1 git push --delete origin`
+`git tag -l | xargs -n 1 git push --delete origin`  
 Gitタグをすべて削除する
